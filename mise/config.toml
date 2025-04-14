@@ -1,6 +1,7 @@
 [tools]
 node = "22"
 go = "1.23"
+java = "corretto-8.442.06.1"
 
 [settings]
 experimental = true
