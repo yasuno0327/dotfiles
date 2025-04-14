@@ -27,13 +27,15 @@ zinit light zsh-users/zsh-completions
 zinit light zdharma/history-search-multi-word 
 
 # Tmux
-TMUX_SESSION_NAME="tmux"
-tmux has-session -t $TMUX_SESSION_NAME &> /dev/null
+if [[ -z "$NVIM" ]]; then
+  TMUX_SESSION_NAME="tmux"
+  tmux has-session -t $TMUX_SESSION_NAME &> /dev/null
 
-if [ $? != 0 ]; then
-  tmux new-session -s $TMUX_SESSION_NAME
+  if [ $? != 0 ]; then
+    tmux new-session -s $TMUX_SESSION_NAME
+  fi
+  tmux attach -d -t $TMUX_SESSION_NAME
 fi
-tmux attach -d -t $TMUX_SESSION_NAME
 
 # Kubernetes
 source <(kubectl completion zsh)
