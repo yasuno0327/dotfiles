@@ -1,5 +1,9 @@
+# Amazon Q pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
+
 export PATH=~/.local/bin:$PATH
 
+# 一旦Amazon Qの補完機能を使ってみる
 autoload -Uz compinit
 compinit
 
@@ -22,19 +26,21 @@ source "${ZINIT_HOME}/zinit.zsh"
 
 zinit light olets/zsh-abbr
 zinit light zsh-users/zsh-syntax-highlighting
-zinit light zsh-users/zsh-autosuggestions
-zinit light zsh-users/zsh-completions
-zinit light zdharma/history-search-multi-word 
+# 一旦Amazon Qの補完機能を使ってみる
+# zinit light zsh-users/zsh-autosuggestions
+# zinit light zsh-users/zsh-completions
+# zinit light zdharma/history-search-multi-word 
 
 # Tmux
-if [[ -z "$NVIM" ]]; then
+if [[ -z "$NVIM" && -z $TMUX && -n $PS1 ]]; then
   TMUX_SESSION_NAME="tmux"
   tmux has-session -t $TMUX_SESSION_NAME &> /dev/null
 
   if [ $? != 0 ]; then
     tmux new-session -s $TMUX_SESSION_NAME
+  else
+    tmux attach-session
   fi
-  tmux attach -d -t $TMUX_SESSION_NAME
 fi
 
 # Kubernetes
@@ -58,3 +64,6 @@ abbr -S config_vim='nvim $VIMRC'
 abbr -S lg='lazygit'
 abbr -S git-force-pull='git fetch && git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)'
 abbr -S stop_container='docker stop $(docker ps -a -q)'
+
+# Amazon Q post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
