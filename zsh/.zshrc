@@ -1,6 +1,18 @@
 # Amazon Q pre block. Keep at the top of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
 
+# Tmux
+if [[ -z "$NVIM" && -z $TMUX && -n $PS1 ]]; then
+  TMUX_SESSION_NAME="tmux"
+  tmux has-session -t $TMUX_SESSION_NAME &> /dev/null
+
+  if [ $? != 0 ]; then
+    tmux new-session -s $TMUX_SESSION_NAME
+  else
+    tmux attach-session
+  fi
+fi
+
 export PATH=~/.local/bin:$PATH
 
 # 一旦Amazon Qの補完機能を使ってみる
@@ -31,20 +43,15 @@ zinit light zsh-users/zsh-syntax-highlighting
 # zinit light zsh-users/zsh-completions
 # zinit light zdharma/history-search-multi-word 
 
-# Tmux
-if [[ -z "$NVIM" && -z $TMUX && -n $PS1 ]]; then
-  TMUX_SESSION_NAME="tmux"
-  tmux has-session -t $TMUX_SESSION_NAME &> /dev/null
-
-  if [ $? != 0 ]; then
-    tmux new-session -s $TMUX_SESSION_NAME
-  else
-    tmux attach-session
-  fi
-fi
-
 # Kubernetes
 source <(kubectl completion zsh)
+
+## java
+#export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-17.jdk/Contents/Home
+export PATH=$PATH:$JAVA_HOME/bin
+export PATH="/Applications/IntelliJ IDEA CE.app/Contents/plugins/maven/lib/maven3/bin:$PATH"
+export MAVEN_OPTS="-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true"
 
 # Starship (Need put at end of file)
 export STARSHIP_CONFIG=$XDG_CONFIG_HOME/starship/starship.toml
